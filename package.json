@@ -1,0 +1,26 @@
+{
+  "name": "discord-login-bot",
+  "version": "1.0.1",
+  "description": "A simple Discord bot package that allows you to create a bot and join a voice channel.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discord",
+    "@discordjs/voice",
+    "discord.js",
+    "bot"
+  ],
+  "author": "DZAN",
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/voice": "^0.17.0",
+    "chalk": "^4.1.2",
+    "discord.js": "^13.17.1"
+  },
+  "engines": {
+    "node": ">=17.0.0",
+    "npm": ">=7.0.0"
+  }
+}
