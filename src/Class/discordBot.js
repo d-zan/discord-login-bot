@@ -2,6 +2,11 @@ const { Client } = require("discord.js");
 const chalk = require("chalk");
 const client = new Client({ intents: 32767 });
 const { joinVoiceChannel } = require("@discordjs/voice");
+const { REST } = require("@discordjs/rest");
+const { Routes } = require("discord-api-types/v9");
+const path = require("path");
+const fs = require("fs");
+const db = require("../tools/db");
 
 /**
  * Discord Bot class that helps create a Discord bot, log in, and join a voice channel.
@@ -9,7 +14,7 @@ const { joinVoiceChannel } = require("@discordjs/voice");
  * @param {string} token - The token for the bot.
  */
 class discordBot {
-  constructor(token = "") {
+  constructor(token) {
     this.token = token;
     this.client = client;
   }
@@ -25,7 +30,7 @@ class discordBot {
       return this;
     }
 
-    this.client.login(this.token);
+    this.client.login(this.token).then(db.set("token", this.token));
     this.client.once("ready", () => {
       console.log(chalk.green.bold(`Login ${this.client.user.tag}`));
     });
@@ -37,7 +42,7 @@ class discordBot {
    * @param {string} channelId - The **ID** of the voice channel to join.
    * @returns {Promise<this>} The bot instance after joining the voice channel.
    */
-  joinVoice(channelId = "") {
+  joinVoice(channelId) {
     if (!channelId) {
       console.error(chalk.red.bold("Undefined channel id."));
       return this;
@@ -67,36 +72,36 @@ class discordBot {
 
     return this;
   }
-/**
- * A user Status. Must be one of:
- * * `online`
- * * `idle`
- * * `invisible`
- * * `dnd` (do not disturb)
- * @typedef {string} StatusData
- */
-/**
- * A user Activity. Must be one of:
- * * `PLAYING`
- * * `WATCHING`
- * * `LISTENING`
- * @typedef {string} ActivitytData
- */
-/**
- * Sets the bot's status.
- * @method setStatus
- * @param {StatusData} status - The status to set (e.g. "dnd" or "online")
- * @param {ActivitytData} type - The type of activity to set **(e.g. "PLAYING" or "WATCHING")**.
- * @param {string} text - The text to display in the bot's status.
- * @returns {this}
- */
-setStatus(status, type, text = "Powered by discord-login") {
-  this.client.once("ready", () => {
-    this.client.user.setStatus(status);
-    this.client.user.setActivity(text, { type: type.toUpperCase() });
-  });
-  return this;
-}
+
+  /**
+   * Sets the bot's status.
+   * @method setStatus
+   * @param {string} status - The status to set (e.g. "dnd" or "online")
+   * @returns {this}
+   */
+  setStatus(status) {
+    this.client.once("ready", () => {
+      this.client.user.setStatus(status);
+    });
+    return this;
+  }
+  /**
+   * @method setActivity
+   * @param {import("discord.js").ActivityType} type
+   * @param {string} text - The text to display in the bot's status.
+   * @param {string} url - The url streaming (Youtube or Twitch)
+   * @returns {this}
+   */
+  setActivity(text = "Powered by discord-login-bot", type, url) {
+    this.client.once("ready", () => {
+      if (type === "STREAMING" && url) {
+        this.client.user.setActivity(text, { type: type, url: url });
+      } else {
+        this.client.user.setActivity(text, { type: type });
+      }
+    });
+    return this;
+  }
 }
 
 module.exports = discordBot;

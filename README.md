@@ -15,12 +15,13 @@ npm install discord-login-bot
 To use this package, create a new instance of the discordBot class and call the login method to log in to Discord.
 
 ```js
-const { discordBot } = require("discord-login-bot");
+const { discordBot, statusType } = require("discord-login-bot");
 
 const bot = new discordBot("YOUR_BOT_TOKEN");
 bot.login(); //login
 bot.joinVoice("channelId"); // if you want bot join voice channel
-bot.setStatus("online", "PLAYING", "Powered by discord-login-bot"); // add status bot
+bot.setStatus(statusType.online); // add status bot
+bot.setActivity("DZAN TESTING NEW VIRSON", "PLAYING"); // add activity bot (support streaming)
 ```
 
 ## Methods
@@ -35,15 +36,24 @@ Joins a voice channel with the provided ID.
 
 `channelId`: **The ID of the voice channel to join.**
 
-### setStatus(status, type, text)
+### setStatus(status)
 
 Sets the bot's status.
 
 - `status`: The status to set **(e.g. "dnd" or "online")**.
+
+### setActivity( type, text)
+
+Sets the bot's activity.
+
 - `type`: The type of activity to set **(e.g. "PLAYING" or "WATCHING")**.
 - `text`: The text to display in the bot's status.
 
 ---
+## SlashCommand
+### deletingCommand(clientId,guildId) && deletingCommandsWithToken(clientId,guildId)
+if You want delete all command from server `.guild()`
+if You want delete all command but global `.global()`
 
 ## License
 
@@ -51,8 +61,8 @@ This package is licensed under the MIT License.
 
 ## Acknowledgments
 
-This package uses the discord.js v13 library and the @discordjs/voice library chalk library.
+This package uses the discord.js v13 library , chalk library.
 
-## developer
+## Developer
 
 discord : dz0.
